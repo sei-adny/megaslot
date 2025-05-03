@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アルコールスロット</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>アルコールスロット</h1>
+
+  <div id="slot-container">
+    <!-- 左右の三角形を追加 -->
+    <div class="triangle left">▶</div>
+    <div class="triangle right">◀</div>
+    <!-- スロット本体 -->
+    <div id="slot"></div>
+  </div>
+
+  <div>
+    <button id="start">スタート</button>
+    <button id="stop" disabled>ストップ</button>
+  </div>
+
+  <script>
+    let slotInterval;
+    const slotElement = document.getElementById('slot');
+    const startButton = document.getElementById('start');
+    const stopButton = document.getElementById('stop');
+
+    // 数字に対応する飲み物のリスト
+    const drinks = [
+      "ハイボール",
+      "知多ハイ",
+      "レモンサワー",
+      "ビール",
+      "ウーロンハイ",
+      "緑茶ハイ",
+      "メガハイ", // 7番目
+      "日本酒",
+      "ワイン"
+    ];
+
+    // スロットの内容を生成
+    function createSlotItems() {
+      slotElement.innerHTML = ""; // クリア
+      drinks.forEach(drink => {
+        const div = document.createElement('div');
+        div.className = 'slot-item';
+        div.textContent = drink;
+        slotElement.appendChild(div);
+      });
+      // 繰り返しのために内容を複製
+      drinks.forEach(drink => {
+        const div = document.createElement('div');
+        div.className = 'slot-item';
+        div.textContent = drink;
+        slotElement.appendChild(div);
+      });
+    }
+
+    // スタートボタンの処理
+    startButton.addEventListener('click', () => {
+      startButton.disabled = true;
+      stopButton.disabled = false;
+      createSlotItems(); // リセットして再生成
+      slotElement.style.animation = "scroll 2.0s linear infinite"; // スロットを回転
+    });
+
+    // ストップボタンの処理
+    stopButton.addEventListener('click', () => {
+      startButton.disabled = false;
+      stopButton.disabled = true;
+      slotElement.style.animation = "none";
+      slotElement.innerHTML = `
+        <div class="slot-item">日本酒</div>
+        <div class="slot-item">メガハイ</div>
+        <div class="slot-item">ワイン</div>
+      `; // 真ん中に「メガハイ」を固定表示
+    });
+
+    // ページ読み込み時にスロット内容を生成
+    createSlotItems();
+  </script>
+</body>
+</html>
