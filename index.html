@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +10,8 @@
   <h1>アルコールスロット</h1>
 
   <div id="slot-container">
-    <!-- 左右の三角形を追加 -->
     <div class="triangle left">▶</div>
     <div class="triangle right">◀</div>
-    <!-- スロット本体 -->
     <div id="slot"></div>
   </div>
 
@@ -22,13 +20,20 @@
     <button id="stop" disabled>ストップ</button>
   </div>
 
+  <!-- メガハイ演出 -->
+  <div id="effect" class="hidden">🎉 MEGA HIGH! 🎉</div>
+
+  <!-- ランダム演出 -->
+  <div id="effects-container" class="hidden"></div>
+
   <script>
-    let slotInterval;
     const slotElement = document.getElementById('slot');
     const startButton = document.getElementById('start');
     const stopButton = document.getElementById('stop');
+    const effect = document.getElementById('effect');
+    const effectsContainer = document.getElementById('effects-container');
+    const slotContainer = document.getElementById('slot-container');
 
-    // 数字に対応する飲み物のリスト
     const drinks = [
       "ハイボール",
       "知多ハイ",
@@ -36,51 +41,75 @@
       "ビール",
       "ウーロンハイ",
       "緑茶ハイ",
-      "メガハイ", // 7番目
+      "メガハイ",
       "日本酒",
       "赤ワイン"
     ];
 
-    // スロットの内容を生成
     function createSlotItems() {
-      slotElement.innerHTML = ""; // クリア
-      drinks.forEach(drink => {
-        const div = document.createElement('div');
-        div.className = 'slot-item';
-        div.textContent = drink;
-        slotElement.appendChild(div);
-      });
-      // 繰り返しのために内容を複製
-      drinks.forEach(drink => {
-        const div = document.createElement('div');
-        div.className = 'slot-item';
-        div.textContent = drink;
-        slotElement.appendChild(div);
-      });
+      slotElement.innerHTML = "";
+      for (let i = 0; i < 2; i++) {
+        drinks.forEach(drink => {
+          const div = document.createElement('div');
+          div.className = 'slot-item';
+          div.textContent = drink;
+          slotElement.appendChild(div);
+        });
+      }
     }
 
-    // スタートボタンの処理
+    function launchRandomEffect() {
+      const effects = ['fireworks', 'flash', 'cheers', 'confetti', 'rainbow'];
+      const selected = effects[Math.floor(Math.random() * effects.length)];
+
+      effectsContainer.className = 'hidden';
+      slotContainer.classList.remove('rainbow-border');
+
+      setTimeout(() => {
+        effectsContainer.className = selected;
+        if (selected === 'rainbow') {
+          slotContainer.classList.add('rainbow-border');
+        }
+      }, 100);
+
+      setTimeout(() => {
+        effectsContainer.className = 'hidden';
+        slotContainer.classList.remove('rainbow-border');
+      }, 3000);
+    }
+
     startButton.addEventListener('click', () => {
       startButton.disabled = true;
       stopButton.disabled = false;
-      createSlotItems(); // リセットして再生成
-      slotElement.style.animation = "scroll 2.0s linear infinite"; // スロットを回転
+      createSlotItems();
+      slotElement.style.animation = "scroll 2s linear infinite";
+
+      setTimeout(() => {
+        launchRandomEffect();
+      }, 1000);
     });
 
-    // ストップボタンの処理
     stopButton.addEventListener('click', () => {
       startButton.disabled = false;
       stopButton.disabled = true;
       slotElement.style.animation = "none";
+
       slotElement.innerHTML = `
         <div class="slot-item">日本酒</div>
         <div class="slot-item">メガハイ</div>
-        <div class="slot-item">ワイン</div>
-      `; // 真ん中に「メガハイ」を固定表示
+        <div class="slot-item">赤ワイン</div>
+      `;
+
+      effect.classList.remove("hidden");
+      setTimeout(() => {
+        effect.classList.add("hidden");
+      }, 3000);
     });
 
-    // ページ読み込み時にスロット内容を生成
-    createSlotItems();
+    window.addEventListener('load', () => {
+      createSlotItems();
+      effect.classList.add("hidden");
+    });
   </script>
 </body>
 </html>
