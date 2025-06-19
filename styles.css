@@ -97,31 +97,6 @@ button:disabled {
   box-shadow: none;
 }
 
-#effect {
-  position: fixed;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 80px;
-  font-weight: bold;
-  padding: 40px 60px;
-  background: rgba(255, 255, 255, 0.95);
-  color: gold;
-  border: 5px solid gold;
-  border-radius: 30px;
-  text-shadow:
-    0 0 10px #ffd700,
-    0 0 20px #ff0,
-    0 0 30px red,
-    0 0 40px red;
-  animation: megaFlash 1s ease-in-out infinite;
-  z-index: 999;
-  box-shadow:
-    0 0 30px 10px rgba(255, 255, 0, 0.6),
-    inset 0 0 20px rgba(255, 255, 255, 0.9);
-  pointer-events: none;
-}
-
 @keyframes megaFlash {
   0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
   50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.6; }
